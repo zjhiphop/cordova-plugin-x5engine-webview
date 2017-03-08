@@ -55,7 +55,7 @@ import java.lang.reflect.Method;
  *  B) Separating the actual View from the Engine makes API surfaces smaller.
  * Class uses two-phase initialization. However, CordovaWebView is responsible for calling .init().
  */
-public class X5WebViewEngine implements CordovaWebViewEngine {
+abstract class X5WebViewEngine implements CordovaWebViewEngine {
     public static final String TAG = "X5WebViewEngine";
 
     protected final X5WebView webView;
