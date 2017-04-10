@@ -29,6 +29,8 @@ import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.webkit.ValueCallback;
+
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm;
 import com.tencent.smtt.sdk.WebView;
@@ -55,7 +57,7 @@ import java.lang.reflect.Method;
  *  B) Separating the actual View from the Engine makes API surfaces smaller.
  * Class uses two-phase initialization. However, CordovaWebView is responsible for calling .init().
  */
-abstract class X5WebViewEngine implements CordovaWebViewEngine {
+public class X5WebViewEngine implements CordovaWebViewEngine {
     public static final String TAG = "X5WebViewEngine";
 
     protected final X5WebView webView;
@@ -135,6 +137,11 @@ abstract class X5WebViewEngine implements CordovaWebViewEngine {
         return webView;
     }
 
+    @Override
+    public void evaluateJavascript(String js, ValueCallback<String> callback) {
+        Log.d("[WARN]", "evaluateJavascript method is not implemented yet.");
+    }
+
     @SuppressLint({"NewApi", "SetJavaScriptEnabled"})
     @SuppressWarnings("deprecation")
     private void initWebViewSettings() {
@@ -145,6 +152,10 @@ abstract class X5WebViewEngine implements CordovaWebViewEngine {
         settings.setJavaScriptEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
+
+        // set view-port support for Android <=4.3
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
 
         // Set the nav dump for HTC 2.x devices (disabling for ICS, deprecated entirely for Jellybean 4.2)
         try {
